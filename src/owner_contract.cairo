@@ -15,11 +15,36 @@ mod OwnerContract {
     #[abi_embed(v0)]
     // #[external(v0)]
     impl OwnableImpl of IOwnable<ContractState> {
-        fn set_owner(ref self: ContractState, new_owner: ContractAddress) {
-            self.owner.write(new_owner);
+        //semi access
+        fn owner_write(ref self: ContractState, new_owner: ContractAddress) {
+            // Check if the sender is the owner
+           if self.sender() != self.owner.read() {
+               // If not, revert the transaction
+               revert()
+           }
+           self.owner.write(new_owner);
         }
         fn get_owner(self: @ContractState) -> ContractAddress {
             self.owner.read()
         }
     }
-}
+
+    //full access control
+       fn owner_write(ref self: ContractState, new_owner: ContractAddress) {
+          // Check if the sender is the owner
+          if self.sender() != self.owner.read() {
+              // If not, revert the transaction
+              revert()
+          }
+          self.owner.write(new_owner);
+      }
+      fn owner_read(self: @ContractState) -> ContractAddress {
+          // Check if the sender is the owner
+          if self.sender() != self.owner.read() {
+              // If not, revert the transaction
+              revert()
+          }
+          self.owner.read()
+      }
+  }
+

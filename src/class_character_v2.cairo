@@ -4,6 +4,16 @@ mod ClassCharacterV2 {
 use core::starknet::event::EventEmitter;
     use starknet::{ContractAddress, get_caller_address};
 
+//  trait IStudent {
+//  fn add_student(self: Student) -> Student;
+//  fn get_student(self: Student) -> Student;
+// }
+
+// trait IOwnable<T> {
+//     fn set_owner(ref self: T, new_owner: ContractAddress);
+//     fn get_owner(self: @T) -> ContractAddress;
+// }
+
     // event 
     #[event]
     #[derive(Drop, starknet::Event)]

@@ -1,4 +1,24 @@
-#[starknet::contract]
+use starknet::ContractAddress;
+#[starknet::interface]
+trait IClassCharacterV2<TContractState> {
+     fn add_student(
+        ref self: TContractState,
+        student_account: ContractAddress,
+        _name: felt252,
+        _age: u8,
+        _is_active: bool,
+        _has_reward: bool,
+        _xp_earnings: u256,
+    );
+
+    fn set_owner(ref self: ContractState, _new_owner: ContractAddress) -> bool;
+    fn get_owner(self: @ContractState) -> ContractAddress;
+    fn internal_get_owner(self: @ContractState) -> ContractAddress;
+    fn get_student(self: @ContractState, student_account: ContractAddress) -> Student;
+}
+ 
+
+    #[starknet::contract]
 mod ClassCharacterV2 {
     use core::zeroable::Zeroable;
 use core::starknet::event::EventEmitter;

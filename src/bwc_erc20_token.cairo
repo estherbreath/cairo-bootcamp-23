@@ -222,11 +222,11 @@ mod test {
     use super::{IERC20, BWCERC20Token, IERC20Dispatcher, IERC20DispatcherTrait};
     use starknet::ContractAddress;
     use starknet::contract_address::contract_address_const;
-    use array::ArrayTrait;
+    use core::array::ArrayTrait;
     use snforge_std::{declare, ContractClassTrait, fs::{FileTrait, read_txt}};
     use snforge_std::{start_prank, stop_prank, CheatTarget};
     use snforge_std::PrintTrait;
-    use traits::{Into, TryInto};
+    use core::traits::{Into, TryInto};
 
     // helper function
     fn deploy_contract() -> ContractAddress {
@@ -314,7 +314,18 @@ mod test {
         stop_prank(CheatTarget::One(contract_address));
     }
 
+    // #[test]
+    // fn test_transfer_from() {
+    //     let contract_address = deploy_contract();
+    //     let dispatcher = IERC20Dispatcher { contract_address };
+    //     let user1 = Account::user1();
+    //     start_prank(CheatTarget::One(contract_address), Account::admin());
+        
+    //     dispatcher.approve(contract_address, 10);
 
+    // }
+
+   
     mod Errors {
         const INVALID_DECIMALS: felt252 = 'Invalid decimals';
         const UNMATCHED_SUPPLY: felt252 = 'Unmatched supply';
@@ -324,7 +335,7 @@ mod test {
     mod Account {
         use core::option::OptionTrait;
         use starknet::ContractAddress;
-        use traits::TryInto;
+        use core::traits::TryInto;
 
         fn user1() -> ContractAddress {
             'joy'.try_into().unwrap()
@@ -337,5 +348,10 @@ mod test {
             'admin'.try_into().unwrap()
         }
     }
+
+   
+    
 }
+
+
 

@@ -240,6 +240,23 @@ mod test {
         contract_address
     }
 
+     // Generate an address
+    mod Account {
+        use starknet::ContractAddress;
+        use core::traits::TryInto;
+
+        fn user1() -> ContractAddress {
+            'joy'.try_into().unwrap()
+        }
+        fn user2() -> ContractAddress {
+            'caleb'.try_into().unwrap()
+        }
+
+        fn admin() -> ContractAddress {
+            'admin'.try_into().unwrap()
+        }
+    }
+     //The test
     #[test]
     fn test_constructor() {
         let contract_address = deploy_contract();
@@ -323,7 +340,7 @@ mod test {
         let user1 = Account::user1();
         start_prank(CheatTarget::One(contract_address), Account::admin());
         dispatcher.approve(user1, 10);
-        assert(dispatcher.allowance(Account::admin(), user1) == 10, Errors::NOT_ALLOWED);
+        assert(dispatcher.allowance(Account::admin(), user1) == 10, Errors::INVALID_BALANCE);
         stop_prank(CheatTarget::One(contract_address));
 
         start_prank(CheatTarget::One(contract_address), user1);
@@ -356,34 +373,50 @@ mod test {
         dispatcher.transfer_from(Account::admin(), Account::user2(), 5);
     }
 
+    #[test]
+    fn test_approve() {
+        let contract_address = deploy_contract();
+        let dispatcher = IERC20Dispatcher { contract_address}; 
 
-    mod Errors {
+        start_prank(CheatTarget::One(contract_address), Account::admin());
+        dispatcher.approve(Account::user1(), 50);
+       assert(
+            dispatcher.allowance(Account::admin(), Account::user1()) == 50,
+            Errors::INVALID_ALLOWANCE_GIVEN
+        );
+    }
+
+        // #[test]
+        // fn test_increase_allowance() {
+        //     let contract_address = deploy
+        // }
+
+
+
+        
+        
+
+        //Errors
+        mod Errors {
         const INVALID_DECIMALS: felt252 = 'Invalid decimals';
         const UNMATCHED_SUPPLY: felt252 = 'Unmatched supply';
         const INVALID_BALANCE: felt252 = 'Invalid balance';
-        const NOT_ALLOWED: felt252 = 'Not allowed';
-    }
-
-    mod Account {
-        use core::option::OptionTrait;
-        use starknet::ContractAddress;
-        use core::traits::TryInto;
-
-        fn user1() -> ContractAddress {
-            'joy'.try_into().unwrap()
+        const INVALID_ALLOWANCE_GIVEN: felt252 = 'Invalid allowance given';
+        const FUNDS_NOT_SENT: felt252 = 'Funds not sent!';
+        }
         }
 
-        fn user2() -> ContractAddress {
-            'caleb'.try_into().unwrap()
-        }
-        fn admin() -> ContractAddress {
-            'admin'.try_into().unwrap()
-        }
-    }
 
-   
+  
+  
+
+
+     
+
     
-}
+
+
+    
 
 
 

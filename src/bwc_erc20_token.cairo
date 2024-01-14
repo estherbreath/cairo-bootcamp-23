@@ -386,15 +386,26 @@ mod test {
         );
     }
 
-        // #[test]
-        // fn test_increase_allowance() {
-        //     let contract_address = deploy
-        // }
+        #[test]
+        fn test_increase_allowance() {
+            let contract_address = deploy_contract();
+            let dispatcher = IERC20Dispatcher { contract_address };
 
+            start_prank(CheatTarget::One(contract_address), Account::admin
+            ());
+            dispatcher.approve(Account::user1(), 30);
+            assert(
+                dispatcher.allowance(Account::admin(), Account::user1()) == 30,
+                Errors::INVALID_ALLOWANCE_GIVEN
+            );
+            dispatcher.decrease_allowance(Account::user1(), 5);
 
+            assert(
+                dispatcher.allowance(Account::admin(), Account::user1()) == 25,
+                Errors::INVALID_BALANCE
+            );
+        }
 
-        
-        
 
         //Errors
         mod Errors {
